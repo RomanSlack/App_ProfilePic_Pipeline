@@ -177,9 +177,7 @@
         tempCanvas.height = vh;
         const ctx = tempCanvas.getContext("2d");
 
-        // Un-mirror: flip horizontally
-        ctx.translate(vw, 0);
-        ctx.scale(-1, 1);
+        // Send raw (non-mirrored) frame — CSS scaleX(-1) is display-only
         ctx.drawImage(webcamVideo, 0, 0, vw, vh);
 
         stopWebcam();

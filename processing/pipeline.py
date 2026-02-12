@@ -11,6 +11,36 @@ from .lighting import normalize_lighting
 
 OUTPUT_SIZE = 800
 
+# Perspective correction strength: 0.0 = off, 0.5 = moderate (~50mm), 1.0 = strong (~85mm)
+LENS_CORRECTION = 0.5
+
+
+def _correct_perspective(image, strength=LENS_CORRECTION):
+    """Simulate a longer focal length to reduce wide-angle face distortion.
+
+    Webcams (~28mm) exaggerate close features (nose looks bigger, face rounder).
+    This applies pincushion correction to approximate a ~50-60mm portrait lens,
+    making faces look more natural and recognizable.
+    """
+    h, w = image.shape[:2]
+    cx, cy = w / 2.0, h / 2.0
+    max_r = np.sqrt(cx**2 + cy**2)
+
+    y_coords, x_coords = np.mgrid[0:h, 0:w].astype(np.float32)
+    dx = x_coords - cx
+    dy = y_coords - cy
+    r_norm = np.sqrt(dx**2 + dy**2) / max_r
+
+    # Pincushion: compress center, expand edges (simulates perspective compression)
+    k = strength * 0.3
+    scale = 1.0 + k * (r_norm ** 2)
+
+    map_x = (cx + dx * scale).astype(np.float32)
+    map_y = (cy + dy * scale).astype(np.float32)
+
+    return cv2.remap(image, map_x, map_y, cv2.INTER_LANCZOS4,
+                     borderMode=cv2.BORDER_REFLECT)
+
 
 def _circle_mask(size):
     """Create an antialiased circular alpha mask."""
@@ -55,7 +85,10 @@ def process_image(image_bytes):
     crop_coords = compute_headshot_crop(face_info, image_bgr.shape)
     cropped = crop_headshot(image_bgr, crop_coords)
 
-    # Re-detect face in cropped image for accurate face box
+    # 3b. Correct wide-angle perspective distortion
+    cropped = _correct_perspective(cropped)
+
+    # Re-detect face in corrected image for accurate face box
     cropped_face = detect_face(cropped)
     face_box = cropped_face["box"] if cropped_face else None
 

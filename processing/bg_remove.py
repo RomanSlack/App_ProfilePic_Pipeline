@@ -7,14 +7,14 @@ _session = None
 
 
 def init_session():
-    """Initialize rembg GPU session with u2net_human_seg model.
+    """Initialize rembg GPU session with BiRefNet portrait model.
 
     Call once at startup to pre-download model and warm up GPU.
     """
     global _session
     if _session is None:
         _session = new_session(
-            model_name="u2net_human_seg",
+            model_name="birefnet-portrait",
             providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
         )
     return _session
