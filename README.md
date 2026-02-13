@@ -1,6 +1,20 @@
 # Profile Photo Studio
 
+<p align="center">
+  <img src="readme_assets/profile_photo_demo_trimmed.gif" alt="Profile Photo Studio demo" width="1080">
+</p>
+
 Web app that turns any photo or webcam capture into a clean, consistent circular profile picture. Detects the face, frames a headshot, corrects wide-angle distortion, normalizes lighting, removes the background, and outputs a transparent circular PNG.
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Flask-3.x-000?logo=flask" alt="Flask">
+  <img src="https://img.shields.io/badge/OpenCV-4.x-5C3EE8?logo=opencv" alt="OpenCV">
+  <img src="https://img.shields.io/badge/MediaPipe-0.10-00A86B?logo=google" alt="MediaPipe">
+  <img src="https://img.shields.io/badge/BiRefNet-Portrait-FF6F00" alt="BiRefNet">
+  <img src="https://img.shields.io/badge/ONNX_Runtime-GPU-7B2D8E?logo=onnx" alt="ONNX Runtime">
+  <img src="https://img.shields.io/badge/CUDA-Accelerated-76B900?logo=nvidia" alt="CUDA">
+  <img src="https://img.shields.io/badge/Vanilla_JS-ES6-F7DF1E?logo=javascript" alt="JavaScript">
+</p>
 
 ## Features
 
